@@ -42,7 +42,7 @@ var NORMALIZED_EASING_FUNCTION;
 var KEYTIME_FUNCTION;
 
 SPRING = {
-name:"Spring",
+name:"CustomSpring",
 code:
 "//var factor = 0.5;\n" + 
 "var config = undefined;\n" + 
@@ -73,7 +73,7 @@ slider3Text:null,
 defaultPara:'var factor = '+factor1.toString()+';\n'};
 
 BOUNCE = {
-name:"Bounce",
+name:"CustomBounce",
 code:
 "//var mTension = 0.;\n" + 
 "//var mFriction = 0.;\n" + 
@@ -117,7 +117,7 @@ slider3Text:null,
 defaultPara:'var mTension = '+factor1.toString()+';\n var mFriction = '+factor2.toString()+';\n'};
 
 DAMPING = {
-name:"Damping",
+name:"CustomDamping",
 code:
 "//var mTension = 0.;\n" + 
 "//var mFriction = 0.;\n" + 
@@ -161,7 +161,7 @@ slider3Text:null,
 defaultPara:'var mTension = '+factor1.toString()+';\n var mFriction = '+factor2.toString()+';\n'};
 
 MOCOSSPRING = {
-name:"MocosSpring",
+name:"CustomMocosSpring",
 code:
 "//var tension = 100.;\n" + 
 "//var damping = 15.;\n" + 
@@ -1203,7 +1203,8 @@ function android_interpolator_script(ui_reference) {
 		var STATIC_TEXT_DIMENSIONS = [0, 0, 80, 15];
 		var theTextColorArray = [0, 0.96, 0.94, 1];
 
-		android_interpolator.pavarte = (thisObj instanceof Panel) ? thisObj : new Window("pavarte", "Animator", undefined, {resizeable: true});
+		// android_interpolator.pavarte = (thisObj instanceof Panel) ? thisObj : new Window("pavarte", "Animator", undefined, {resizeable: true});
+		android_interpolator.pavarte = thisObj;
 		android_interpolator.pavarte.margins       = 6;
 		android_interpolator.pavarte.alignChildren = 'left';
 
@@ -1581,7 +1582,8 @@ function android_interpolator_script(ui_reference) {
 		applyBtn.onClick = an_setAnimationCurves;
 		var helpBtn      = buttonGrp.add("button {text:'?', maximumSize:[30,30]}");
 		helpBtn.onClick  = function() {alert("Android Interpolator v " + android_interpolator.VERSION + "\n" + android_interpolator.strHelpText, "Android Interpolator")};
-
+		var bezierBtn     = buttonGrp.add('button', [0, 0, 74, 28], 'Get Bezier');
+		bezierBtn.onClick = getCubicbeziers;
 		// var testGrp = android_interpolator.pavarte.add('group', undefined, 'Button group');
 		// testGrp.add('statictext', STATIC_TEXT_DIMENSIONS, '');
 		// var testBtn     = testGrp.add('button', undefined, 'Test');
@@ -1603,16 +1605,16 @@ function android_interpolator_script(ui_reference) {
 
 	function getParameters(mode_num){
 		switch(android_interpolator.interpolatorTypesAry[mode_num].name) {
-			case "Spring":
+			case "CustomSpring":
 				prefixParameters = 'var factor = '+factor1.toString()+'; \n';
 				break;
-			case "Bounce":
+			case "CustomBounce":
 				prefixParameters = 'var mTension = '+factor1.toString()+';\nvar mFriction = '+factor2.toString()+';\n';
 				break;
-			case "Damping":
+			case "CustomDamping":
 				prefixParameters = 'var mTension = '+factor1.toString()+';\nvar mFriction = '+factor2.toString()+';\n';
 				break;
-			case "MocosSpring":
+			case "CustomMocosSpring":
 				prefixParameters = 'var tension = '+factor1.toString()+';\nvar damping = '+factor2.toString()+';\nvar v0 = '+factor3.toString()+';\n';
 				break;
 			case "AndroidSpring":
@@ -2027,7 +2029,7 @@ function android_interpolator_script(ui_reference) {
 						var x2 = 1-p.keyInTemporalEase(p.selectedKeys[1])[0].influence /100;
 						var y2 = 1-(1-x2)*(p.keyInTemporalEase(p.selectedKeys[1])[0].speed / avSpeed);
 						alert("layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nkeyframe: " + " Cubic-bezier["+Math.abs(x1).toFixed(2)+", "+Math.abs(y1).toFixed(2) +", "+Math.abs(x2).toFixed(2)+", "+Math.abs(y2).toFixed(2) +"]")
-						alert('1')
+						//alert('1')
 					}
 					if (val2<val1){//, to get a curve starting from point [0,1] going to point [1,0], it would be:
 						var x1 = p.keyOutTemporalEase(p.selectedKeys[0])[0].influence /100;
@@ -2036,7 +2038,7 @@ function android_interpolator_script(ui_reference) {
 						var y2 = 1+x2*(p.keyInTemporalEase(p.selectedKeys[1])[0].speed / avSpeed);
 						x2 = 1-x2;
 						alert("layer: [" + selectedLayers[x].name + "]\nproperty: [" + p.name +  "]\nkeyframe: " + " Cubic-bezier["+Math.abs(x1).toFixed(2)+", "+Math.abs(y1).toFixed(2) +", "+Math.abs(x2).toFixed(2)+", "+Math.abs(y2).toFixed(2) +"]")
-						alert('2')
+						//alert('2')
 					}
 					if (val1==val2){
 						var x1 = p.keyOutTemporalEase(p.selectedKeys[0])[0].influence /100;
